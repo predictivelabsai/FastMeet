@@ -70,6 +70,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{text-decoration:underline;}
 .ai-panel{border:1px dashed var(--accent);background:var(--accent-light);border-radius:10px;padding:12px 16px;margin-bottom:12px;color:var(--accent-hover);font-size:13px;line-height:1.55;white-space:pre-wrap;}
 .btn{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:13px;}
 .btn:hover{background:var(--surface-2);} .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);} .btn.primary:hover{background:var(--accent-hover);}
+.btn.xs{padding:2px 8px;font-size:12px;line-height:1.4;}
 .btn.live{background:var(--live);color:#fff;border-color:var(--live);} .btn.live:hover{background:#b91c1c;}
 /* room */
 .stage{background:#0b1620;border-radius:14px;padding:18px;margin-bottom:14px;}

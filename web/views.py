@@ -129,15 +129,33 @@ def meeting_detail(mid):
     else:
         summary = None
 
-    part_card = Div(Div(H3(f"Participants ({len(parts)})"), cls="card-header"),
-                    *[Div(Span(_initials(p["name"]), cls="avatar"),
-                          Div(Div(p["name"], cls="nm"), Div(p["email"], cls="em")),
-                          Div(_pill(p["role"]) if p["role"] == "Host" else _pill(p["rsvp"]),
-                              style="margin-left:auto;"), cls="part-row")
-                      for p in parts], cls="card")
-
     return (_title(m["title"], "", A("← Meetings", href="/meetings?scope=upcoming", cls="btn"), join),
-            Div(Div(info, agenda, summary), Div(part_card), cls="detail-grid"))
+            Div(Div(info, agenda, summary),
+                Div(participants_card(mid), id="part-card"), cls="detail-grid"))
+
+
+def participants_card(mid):
+    parts = db.participants(mid)
+    tally = db.rsvp_tally(mid)
+    rsvp_opts = [("Accepted", "✓"), ("Tentative", "?"), ("Declined", "✕")]
+    rows_ = []
+    for p in parts:
+        if p["role"] == "Host":
+            right = _pill("Host")
+        else:
+            btns = [Button(sym, cls="btn xs" + (" primary" if p["rsvp"] == val else ""), title=val,
+                           **{"hx-post": f"/rsvp/{p['id']}", "hx-vals": f'{{"rsvp":"{val}"}}',
+                              "hx-target": "#part-card", "hx-swap": "innerHTML"}) for val, sym in rsvp_opts]
+            right = Div(*btns, style="display:flex;gap:3px;")
+        rows_.append(Div(Span(_initials(p["name"]), cls="avatar"),
+                         Div(Div(p["name"], cls="nm"), Div(p["email"], cls="em")),
+                         Div(right, style="margin-left:auto;"), cls="part-row"))
+    tally_row = Div(_pill(f"{tally['Accepted']} attending", "accepted"),
+                    _pill(f"{tally['Tentative']} tentative", "tentative"),
+                    _pill(f"{tally['Declined']} declined", "declined"),
+                    style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;")
+    return Div(Div(H3(f"Participants ({len(parts)})"), cls="card-header"),
+               tally_row, *rows_, cls="card")
 
 
 # ---------- room ------------------------------------------------------------

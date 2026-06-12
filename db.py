@@ -21,9 +21,10 @@ RSVPS = ["Accepted", "Tentative", "Declined", "No response"]
 
 
 def connect():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=10)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA busy_timeout = 5000")
     return conn
 
 
@@ -124,3 +125,19 @@ def stats():
         "recordings": scalar("SELECT COUNT(*) FROM meetings WHERE has_recording=1") or 0,
         "total": scalar("SELECT COUNT(*) FROM meetings") or 0,
     }
+
+
+def set_rsvp(participant_id: int, rsvp: str):
+    if rsvp not in RSVPS:
+        return None
+    with cursor() as conn:
+        conn.execute("UPDATE participants SET rsvp=? WHERE id=?", (rsvp, participant_id))
+        r = conn.execute("SELECT meeting_id FROM participants WHERE id=?", (participant_id,)).fetchone()
+        return r[0] if r else None
+
+
+def rsvp_tally(mid: int) -> dict:
+    out = {s: 0 for s in RSVPS}
+    for r in rows("SELECT rsvp, COUNT(*) n FROM participants WHERE meeting_id=? AND role!='Host' GROUP BY rsvp", (mid,)):
+        out[r["rsvp"]] = r["n"]
+    return out

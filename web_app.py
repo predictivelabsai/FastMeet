@@ -112,6 +112,14 @@ def get(session, mid: int):
     return _guard(session, "upcoming", lambda: views.meeting_detail(mid))
 
 
+@rt("/rsvp/{pid}")
+def post(session, pid: int, rsvp: str = ""):
+    if not _user(session):
+        return Response("Unauthorized", status_code=401)
+    mid = db.set_rsvp(pid, rsvp)
+    return views.participants_card(mid) if mid else Response("ok")
+
+
 @rt("/room/{mid}")
 def get(session, mid: int):
     return _guard(session, "upcoming", lambda: views.room_view(mid))

@@ -19,7 +19,7 @@ server-rendered app *can* do well, and is explicit about the part it can't.
 
 ## Near-term roadmap 🔜
 
-1. **RSVP actions** — accept/decline as the invitee; host sees a live tally
+1. ✅ **RSVP actions** (done) — accept/decline/tentative per attendee; host sees a live tally
    (today RSVPs are read-only).
 2. **Recurring meetings** + calendar (week/month) view.
 3. **Availability / scheduling assistant** — find a free slot across invitees.
