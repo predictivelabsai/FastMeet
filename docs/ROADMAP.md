@@ -28,11 +28,11 @@ server-rendered app *can* do well, and is explicit about the part it can't.
 6. **Recording playback** — attach a (synthetic) recording + transcript to past
    meetings; let the AI answer questions over the transcript.
 
-## The big one — live video 🗓️ (out of scope for a server-rendered demo)
+## The big one — live video ✅ (implemented via media embed)
 
 Frappe Meet's core is **WebRTC**: peer media, SFU/TURN, screen share, live audio.
-A FastHTML app renders HTML over HTTP and cannot itself carry real-time media.
-The realistic path is to **embed a media layer**:
+A FastHTML app can't carry WebRTC itself, so the room **embeds** a real media layer
+(`web/media.py`). Implemented:
 
 - **LiveKit** / **Jitsi** / **Daily** room embedded in `/room/{id}`, with FastMeet
   owning scheduling, identity, agendas, recordings and summaries around it; or

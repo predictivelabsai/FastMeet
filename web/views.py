@@ -143,20 +143,21 @@ def meeting_detail(mid):
 # ---------- room ------------------------------------------------------------
 
 def room_view(mid):
+    from web import media
     m = db.meeting(mid)
     if not m:
         return _title("Meeting not found"), P("No such meeting.")
     parts = db.participants(mid)[:8]
+    provider = media.active_provider()
     tiles = [Div(Div(_initials(p["name"]), cls="av"), Div(p["name"], cls="nm"), cls="vtile") for p in parts]
     return (_title(m["title"], f"Room {m['room_code']}", A("← Leave to details", href=f"/meeting/{mid}", cls="btn")),
-            Div(NotStr("📡 <b>Demo room.</b> Live audio/video uses WebRTC, which a server-rendered "
-                       "FastHTML app doesn't carry — so this lobby shows who's here with simulated tiles. "
-                       "See the roadmap for embedding a real media layer (LiveKit / Jitsi)."), cls="notice"),
-            Div(Div(*tiles, cls="tiles"),
-                Div(Button("🎤", cls="cbtn"), Button("📹", cls="cbtn"), Button("🖥", cls="cbtn"),
-                    A("📞", href=f"/meeting/{mid}", cls="cbtn leave", style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;"),
-                    cls="controls"),
-                cls="stage"))
+            Div(NotStr(f"📡 <b>Live video.</b> This room embeds a real media layer "
+                       f"(<b>{provider.title()}</b>) so it carries actual audio/video. Allow camera & mic when "
+                       "prompted. Switch provider with <code>MEET_MEDIA_PROVIDER</code> in <code>.env</code>."),
+                cls="notice"),
+            Div(media.embed(m, parts[0]["name"] if parts else "You"), cls="stage"),
+            Div(Div("Invited", style="font-weight:700;margin-bottom:8px;color:var(--text-dim);"),
+                Div(*tiles, cls="tiles"), cls="card", style="margin-top:14px;"))
 
 
 # ---------- schedule --------------------------------------------------------
