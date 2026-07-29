@@ -119,7 +119,7 @@ a{color:var(--accent);text-decoration:none;} a:hover{text-decoration:underline;}
 
 NAV = [("dashboard", "Dashboard", "📊", "/"), ("upcoming", "Upcoming", "📅", "/meetings?scope=upcoming"),
        ("past", "Past & Recordings", "🎞️", "/meetings?scope=past"), ("ai", "AI Assistant", "🤖", "/ai"),
-       ("guide", "User Guide", "📖", "/guide")]
+       ("guide", "User Guide", "📖", "/guide"), ("developers", "Developers", "⌘", "/developers")]
 SAMPLE_QUESTIONS = ["What's on my schedule today?", "Draft an agenda for a kickoff", "Summarise the API outage retro"]
 
 
