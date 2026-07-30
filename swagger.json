@@ -576,6 +576,11 @@
             "description": "Validation Error"
           }
         },
+        "security": [
+          {
+            "FastSME API token": []
+          }
+        ],
         "summary": "List meetings",
         "tags": [
           "Meetings"
@@ -693,6 +698,11 @@
             "description": "Validation Error"
           }
         },
+        "security": [
+          {
+            "FastSME API token": []
+          }
+        ],
         "summary": "Get one meetings record",
         "tags": [
           "Meetings"
@@ -768,6 +778,11 @@
             "description": "Validation Error"
           }
         },
+        "security": [
+          {
+            "FastSME API token": []
+          }
+        ],
         "summary": "List participants",
         "tags": [
           "Participants"
@@ -820,6 +835,11 @@
             "description": "Validation Error"
           }
         },
+        "security": [
+          {
+            "FastSME API token": []
+          }
+        ],
         "summary": "Get one participants record",
         "tags": [
           "Participants"
