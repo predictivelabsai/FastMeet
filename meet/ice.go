@@ -80,12 +80,12 @@ func setupICE(cfg Config) (*ICE, func(), error) {
 		AuthHandler:   turn.NewLongTermAuthHandler(ice.secret, lf.NewLogger("auth")),
 		PacketConnConfigs: []turn.PacketConnConfig{{
 			PacketConn: udp,
-			RelayAddressGenerator: &turn.RelayAddressGeneratorPortRange{
-				RelayAddress: net.ParseIP(cfg.TURNPublicIP),
+			RelayAddressGenerator: hairpinGenerator{&turn.RelayAddressGeneratorPortRange{
+				RelayAddress: net.ParseIP(cfg.TURNPublicIP).To4(),
 				Address:      "0.0.0.0",
 				MinPort:      uint16(cfg.TURNRelayMin),
 				MaxPort:      uint16(cfg.TURNRelayMax),
-			},
+			}},
 		}},
 	})
 	if err != nil {

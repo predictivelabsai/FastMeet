@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -218,5 +219,35 @@ func TestClientIPUsesProxyHeaders(t *testing.T) {
 	r.Header.Set("X-Real-Ip", "8.8.8.8")
 	if ip := s.clientIP(r); ip != "8.8.8.8" {
 		t.Fatalf("got %s", ip)
+	}
+}
+
+func TestHairpinConnRewritesOwnRelayPorts(t *testing.T) {
+	a, err := net.ListenPacket("udp4", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer a.Close()
+	b, err := net.ListenPacket("udp4", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer b.Close()
+	pub := net.ParseIP("203.0.113.7").To4()
+	pa, pb := a.LocalAddr().(*net.UDPAddr).Port, b.LocalAddr().(*net.UDPAddr).Port
+	lo, hi := min(pa, pb), max(pa, pb)
+	ha := &hairpinConn{PacketConn: a, public: pub, min: lo, max: hi}
+	hb := &hairpinConn{PacketConn: b, public: pub, min: lo, max: hi}
+	if _, err := ha.WriteTo([]byte("ping"), &net.UDPAddr{IP: pub, Port: pb}); err != nil {
+		t.Fatal(err)
+	}
+	_ = b.SetReadDeadline(time.Now().Add(2 * time.Second))
+	buf := make([]byte, 16)
+	n, from, err := hb.ReadFrom(buf)
+	if err != nil || string(buf[:n]) != "ping" {
+		t.Fatalf("read: %q %v", buf[:n], err)
+	}
+	if u := from.(*net.UDPAddr); !u.IP.Equal(pub) || u.Port != pa {
+		t.Fatalf("source %v, want %v:%d", from, pub, pa)
 	}
 }
