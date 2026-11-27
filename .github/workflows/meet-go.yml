@@ -1,0 +1,25 @@
+name: meet-go
+on:
+  push:
+    branches: [main]
+    paths: ["meet/**", ".github/workflows/meet-go.yml"]
+  pull_request:
+    paths: ["meet/**", ".github/workflows/meet-go.yml"]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: meet
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: meet/go.mod
+          cache-dependency-path: meet/go.sum
+      - run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test -race -count=1 ./...
+      - run: docker build -t fastmeet-go .
