@@ -3,6 +3,15 @@
 All notable changes to the Go video-meet server. Versions follow semver and are
 tagged `meet/vX.Y.Z`.
 
+## 0.1.1 (2026-11-27)
+
+- Embedded TURN: relay-to-relay calls now connect when the server runs in a
+  Docker bridge network (Coolify). Packets between two of our own relay ports
+  go over loopback instead of Docker's hairpin NAT, whose rewritten source
+  address failed the TURN permission check.
+- Production turns on the embedded TURN (UDP 3478, relay 49160-49200) so
+  callers behind strict NATs, such as many mobile networks, can still connect.
+
 ## 0.1.0 (2026-11-27)
 
 First release of the Go port, deployed at https://meet.socialagent.fun.
