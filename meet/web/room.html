@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>FastMeet room</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css?v={{.Version}}">
+</head>
+<body class="roompage" data-room="{{.RoomID}}" data-url="{{.RoomURL}}" data-max="{{.MaxPeers}}">
+<header class="top dark">
+  <a class="brand" href="/"><img src="/static/favicon.svg" alt="" width="24" height="24"> FastMeet</a>
+  <a class="powered" href="{{.HomeURL}}/?utm_source=fastmeet&amp;utm_medium=room" rel="noopener" target="_blank">Powered by <b>Social Agent</b></a>
+</header>
+
+<section id="lobby" class="lobby">
+  <div class="preview">
+    <video id="preview" autoplay playsinline muted></video>
+    <div id="preview-note" class="note">Allow your camera and microphone to be seen and heard.</div>
+  </div>
+  <div class="lobby-side">
+    <h1>Ready to join?</h1>
+    <label for="name">Your name</label>
+    <input id="name" maxlength="40" placeholder="Your first name" autocomplete="given-name">
+    <div class="toggles">
+      <button type="button" class="btn toggle on" id="pre-mic" aria-pressed="true">Mic on</button>
+      <button type="button" class="btn toggle on" id="pre-cam" aria-pressed="true">Camera on</button>
+    </div>
+    <button type="button" class="btn primary big" id="join">Join call</button>
+    <div class="share">
+      <span>Invite link</span>
+      <div class="row"><input id="link" readonly value="{{.RoomURL}}"><button type="button" class="btn" id="copy">Copy</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="call" class="call" hidden>
+  <div id="status" class="status" aria-live="polite"></div>
+  <div id="grid" class="grid"></div>
+  <aside id="chat" class="chat" hidden>
+    <div id="chatlog" class="chatlog" aria-live="polite"></div>
+    <form id="chatform" class="row"><input id="chatinput" maxlength="1000" placeholder="Message" autocomplete="off"><button class="btn" type="submit">Send</button></form>
+  </aside>
+  <nav class="controls">
+    <button type="button" class="btn ctl on" id="mic" aria-pressed="true" title="Mute or unmute">Mic</button>
+    <button type="button" class="btn ctl on" id="cam" aria-pressed="true" title="Camera on or off">Camera</button>
+    <button type="button" class="btn ctl" id="chatbtn" title="Chat">Chat</button>
+    <button type="button" class="btn ctl" id="copy2" title="Copy invite link">Copy link</button>
+    <button type="button" class="btn ctl danger" id="leave">Leave</button>
+  </nav>
+</section>
+
+<section id="ended" class="ended" hidden>
+  <h1 id="ended-title">You left the call</h1>
+  <p id="ended-text"></p>
+  <p><button type="button" class="btn primary" id="rejoin">Rejoin</button> <a class="btn" href="/">New room</a></p>
+  <p class="promo">Dating, done for you. <a href="{{.HomeURL}}/?utm_source=fastmeet&amp;utm_medium=ended" rel="noopener">Try Social Agent</a></p>
+</section>
+
+<footer class="foot dark"><a class="powered-link" href="{{.HomeURL}}/?utm_source=fastmeet&amp;utm_medium=powered_by" rel="noopener" target="_blank">Powered by Social Agent</a></footer>
+<script src="/static/app.js?v={{.Version}}"></script>
+</body>
+</html>

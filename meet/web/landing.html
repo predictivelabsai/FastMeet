@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FastMeet: free video calls, no sign-up</title>
+<meta name="description" content="Start a private video call in one click. Share the link, allow your camera, talk. No email, no account, no app.">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css?v={{.Version}}">
+</head>
+<body class="landing">
+<header class="top">
+  <a class="brand" href="/"><img src="/static/favicon.svg" alt="" width="28" height="28"> FastMeet</a>
+  <a class="powered" href="{{.HomeURL}}/?utm_source=fastmeet&amp;utm_medium=header" rel="noopener">Powered by <b>Social Agent</b></a>
+</header>
+<main class="hero">
+  <h1>Say hi on video<br>before you meet.</h1>
+  <p class="lede">One click makes a private call link. Send it, allow your camera, talk.
+     No email, no account, no app to install.</p>
+  {{if .Error}}<p class="error" role="alert">{{.Error}}</p>{{end}}
+  <form method="post" action="/new" class="create">
+    <button type="submit" class="btn primary big" id="create">Create a room</button>
+  </form>
+  <form method="get" action="/join" class="join">
+    <label for="code">Got a link or code?</label>
+    <div class="row">
+      <input id="code" name="code" placeholder="abcd-efgh-jkmn" autocomplete="off" spellcheck="false" required>
+      <button type="submit" class="btn">Join</button>
+    </div>
+  </form>
+  <ul class="points">
+    <li><b>Private.</b> Video goes straight between you and the other person (peer to peer). Nothing is recorded or stored.</li>
+    <li><b>Hard to guess.</b> Every room has its own random link.</li>
+    <li><b>Works anywhere.</b> Phone or laptop, in Chrome, Safari, Firefox or Edge.</li>
+  </ul>
+</main>
+<footer class="foot">
+  <a href="{{.HomeURL}}/?utm_source=fastmeet&amp;utm_medium=powered_by" rel="noopener" class="powered-link">Powered by Social Agent</a>
+  <span class="sep">·</span> <span class="ver">v{{.Version}}</span>
+</footer>
+</body>
+</html>

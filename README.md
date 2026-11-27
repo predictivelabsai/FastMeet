@@ -15,6 +15,12 @@ and **AI agenda generation + meeting summaries**.
 > can't carry. FastMeet does everything *around* the call — see the roadmap for
 > embedding a media layer (LiveKit / Jitsi).
 
+## Live video: FastMeet Go (`meet/`)
+
+[`meet/`](meet/) is a Go port of the room with real peer-to-peer WebRTC video,
+Go websocket signaling and no sign-up, live at https://meet.socialagent.fun.
+See [meet/README.md](meet/README.md).
+
 ## Demo
 
 ![FastMeet walkthrough](docs/demo/fastmeet-walkthrough.gif)
